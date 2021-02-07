@@ -11,6 +11,10 @@ class IndividualBase(ABC):
         pass
 
     @abstractmethod
+    def compare(self, father, combine_params, fitness):
+        pass
+
+    @abstractmethod
     def mutate(self, mutate_params):
         pass
 
@@ -21,6 +25,13 @@ class IndividualBase(ABC):
 class Individual(IndividualBase):
     def combine(self, father, combine_params):
         value = self.value * combine_params + father.value * combine_params
+        return Individual(value)
+
+    def compare(self, father, combine_params, fitness):
+        if fitness(self.value) >= fitness(father.value):
+            value = self.value + self.value * combine_params
+        else:
+            value = father.value + father.value * combine_params
         return Individual(value)
 
     def mutate(self, mutate_params):
