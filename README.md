@@ -26,6 +26,7 @@
 2. Population size is a hyperparameter that can be a random number. A former experiment executed with different population sizes from 2 to 8 and showed that the population size, which is more than 2, is better.
    The figure 
    ![An Evolutionary Algorithm](plot.png) 
+   
    *Fig. 1: The illustration of the algorithm is categorized by 2 methods forming new offspring. For each method, different initial population sizes have been used.*
 3. By using a given fitness function to evaluate the individual fitness. Depending on a problem, different fitness functions can adopt instead.
 4. In this experiment, there are two ways to generate offspring. One way is using two individuals and offspring is the mean of them. Another way is to select two individuals and pick the individual with a higher fitness score.
@@ -59,4 +60,5 @@ Epoch 19: ['x: 3.490 => y: 6.089', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191
 Compare the final result with the global maximum of the graph function to evaluate the algorithm performance.
 
 ![An Evolutionary Algorithm](desmos.png) 
+
 *Fig. 2: The global maximum of the given function*
