@@ -45,3 +45,6 @@ Epoch 17: ['x: 3.487 => y: 6.074', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191
 Epoch 18: ['x: 3.487 => y: 6.074', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191', 'x: 3.603 => y: 6.215', 'x: 3.589 => y: 6.236', 'x: 3.557 => y: 6.244', 'x: 3.558 => y: 6.245', 'x: 3.568 => y: 6.248']
 Epoch 19: ['x: 3.490 => y: 6.089', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191', 'x: 3.603 => y: 6.215', 'x: 3.589 => y: 6.236', 'x: 3.557 => y: 6.244', 'x: 3.558 => y: 6.245', 'x: 3.568 => y: 6.248']
 ```
+Comapre the final result with the global maximum of the graph function to evaluate the performance of the algorithm.
+
+![An Evolutionary Algorithm](desmos.png "An Evolutionary Algorithm")
