@@ -16,7 +16,6 @@ class Population:
         # let the weakness die
         self.individuals = self.individuals[-self.size:]
 
-
     def get_pairs(self):
         odds = self.individuals[1::2]
         evens = self.individuals[0::2]

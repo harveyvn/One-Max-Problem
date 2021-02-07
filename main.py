@@ -12,7 +12,7 @@ def fitness(val):
 
 if __name__ == '__main__':
     evo = Evolution(
-        size=10,
+        size=8,
         fitness=fitness,
         combine_params=0.5,
         mutate_params={"std": 0.5, "dim": 1, "min": 0, "max": 5},

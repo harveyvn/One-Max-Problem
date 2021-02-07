@@ -6,6 +6,7 @@ class Evolution:
         self.population = Population(size, fitness, pop_params)
         self.combine_params = combine_params
         self.mutate_params = mutate_params
+        self.fitness = fitness
 
     def run(self, epochs):
         for ep in range(epochs):
@@ -20,7 +21,7 @@ class Evolution:
             self.population.arrange_population(offsprings)
             print("Epoch {}: {}".format(ep, self.get_pop()))
 
-
     def get_pop(self):
-        ids = ["%.3f" % i.value[0] for i in self.population.individuals]
+        ids = ["x: {} => y: {}".format("%.3f" % i.value[0], "%.3f" % self.fitness(i.value))
+               for i in self.population.individuals]
         return ids
