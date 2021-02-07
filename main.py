@@ -1,4 +1,5 @@
 from evolution import Evolution
+from visualization import Visualization
 
 
 def fitness(val):
@@ -11,13 +12,31 @@ def fitness(val):
 
 
 if __name__ == '__main__':
-    evo = Evolution(
-        size=8,
-        fitness=fitness,
-        combine_params=0.5,
-        mutate_params={"std": 0.5, "dim": 1, "min": 0, "max": 5},
-        pop_params={"min": 0, "max": 5, "dim": 1},
-    )
+    results = []
+    labels = [4, 6, 8, 10]
+    epochs = 60
+    for i in labels:
+        evo = Evolution(
+            size=i,
+            fitness=fitness,
+            combine_params=0.5,
+            mutate_params={"std": 0.5, "dim": 1, "min": 0, "max": 5},
+            pop_params={"min": 0, "max": 5, "dim": 1},
+            method="combine"
+        )
+        evo.run(epochs)
+        results.append(evo.result)
+    for i in labels:
+        evo = Evolution(
+            size=i,
+            fitness=fitness,
+            combine_params=0.1,
+            mutate_params={"std": 0.5, "dim": 1, "min": 0, "max": 5},
+            pop_params={"min": 0, "max": 5, "dim": 1},
+            method="compare"
+        )
+        evo.run(epochs)
+        results.append(evo.result)
 
-    epochs = 20
-    evo.run(epochs)
+    v = Visualization()
+    v.visualize(labels + labels, results, epochs)
