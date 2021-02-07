@@ -14,6 +14,6 @@ class Visualization:
         plt.xlim(0, epochs)
         plt.xlabel("Epoch")
         plt.ylabel("Fitness score")
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
                    fancybox=True, shadow=True, ncol=10)
         plt.show()

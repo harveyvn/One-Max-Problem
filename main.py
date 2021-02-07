@@ -13,8 +13,8 @@ def fitness(val):
 
 if __name__ == '__main__':
     results = []
-    labels = [4, 6, 8, 10]
-    epochs = 60
+    labels = [2, 4, 6, 8]
+    epochs = 100
     for i in labels:
         evo = Evolution(
             size=i,
