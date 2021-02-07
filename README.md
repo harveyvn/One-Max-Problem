@@ -5,12 +5,12 @@
 
 ## Concepts:
 1. Generate an initial population of individuals randomly.
-2. Calculate the fitness score of each individual in the population with a given fitness function.
-3. Run the evolution algorithm in the number of iterations:
-    * Only select best individuals for producing offsprings.
+2. Evaluate the fitness of each individual in the population with a given fitness function.
+3. Repeat the following algorithm until termination:
+    * Select the best individuals for producing offsprings.
     * Mutate those offsprings.
-    * Merge the offspring to the initial population and evaluate the fitness score of each individual.
-    * Remove individuals with a bad fitness score.
+    * Merge the offsprings to the initial population and evaluate the individual fitness of new individuals.
+    * Remove individuals with low fitness scores.
 4. Select the individual with the highest score as the final solution.
 
 ## Questions:
@@ -20,6 +20,14 @@
 4. How to produce and mutate offsprings?
 5. How many individuals die?
 6. How many epochs will we repeat?
+
+## Answers:
+1. The individuals are solutions to given problems. In the beginning, a set of random individuals form an initial population.
+2. Population size is a hyperparameter that can be a random number. A former experiment executed with different population sizes from 2 to 8 and showed that the population size, which is more than 2, is better.
+3. By using a given fitness function to evaluate the individual fitness. Depending on a problem, different fitness functions can adopt instead.
+4. In this experiment, there are two ways to generate offspring. One way is using two individuals and offspring is the mean of them. Another way is to select two individuals and pick the individual with a higher fitness score.
+5. As many as possible. It would be a wise choice to keep the new size as same as the initial population size.
+6. As many as possible.
 
 ## Result
 Execute the experiment in 20 epochs and see how the algorithm evolved.
@@ -45,6 +53,6 @@ Epoch 17: ['x: 3.487 => y: 6.074', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191
 Epoch 18: ['x: 3.487 => y: 6.074', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191', 'x: 3.603 => y: 6.215', 'x: 3.589 => y: 6.236', 'x: 3.557 => y: 6.244', 'x: 3.558 => y: 6.245', 'x: 3.568 => y: 6.248']
 Epoch 19: ['x: 3.490 => y: 6.089', 'x: 3.513 => y: 6.168', 'x: 3.614 => y: 6.191', 'x: 3.603 => y: 6.215', 'x: 3.589 => y: 6.236', 'x: 3.557 => y: 6.244', 'x: 3.558 => y: 6.245', 'x: 3.568 => y: 6.248']
 ```
-Comapre the final result with the global maximum of the graph function to evaluate the performance of the algorithm.
+Compare the final result with the global maximum of the graph function to evaluate the algorithm performance.
 
 ![An Evolutionary Algorithm](desmos.png "An Evolutionary Algorithm")
