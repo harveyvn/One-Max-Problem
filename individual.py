@@ -34,6 +34,13 @@ class Individual(IndividualBase):
             value = father.value + father.value * combine_params
         return Individual(value)
 
+    def mutate_random(self, mutate_params):
+        self.value = np.random.rand(1, )
+        if self.value[0] < mutate_params['min']:
+            self.value[0] = mutate_params['min']
+        if self.value[0] > mutate_params['max']:
+            self.value[0] = mutate_params['max']
+
     def mutate(self, mutate_params):
         std, dim = mutate_params['std'], mutate_params['dim']
         self.value += np.random.normal(0, std, dim)

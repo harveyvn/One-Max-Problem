@@ -4,7 +4,7 @@ from individual import Individual
 
 class Population:
     def __init__(self, size, fitness, params):
-        np.random.seed(0)
+        np.random.seed(1)
         self.fitness = fitness
         self.individuals = [Individual(np.random.uniform(params["min"], params["max"], params["dim"]))
                             for _ in range(size)]
