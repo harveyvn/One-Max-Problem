@@ -15,7 +15,7 @@ def fitness(val):
 
 
 class REvolutionTest(unittest.TestCase):
-    def test_random_evol(self):
+    def test_random_evolution(self):
         np.random.seed(0)
         params = {"min": 0, "max": 5, "dim": 1}
         original_ind = Individual(np.random.uniform(params["min"], params["max"], params["dim"]))
