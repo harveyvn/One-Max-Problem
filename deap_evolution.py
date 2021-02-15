@@ -5,23 +5,23 @@ from threading import Thread, Event
 
 # Event object used to send signals from one thread to another
 stop_event = Event()
+FIRST = 0
 
 
 class DeapEvolution:
-    def __init__(self, fitness, mutate, select, generate_random_ind, expectations):
+    def __init__(self, original_ind, fitness, select, generate_random_ind, expectations):
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list, fitness=creator.FitnessMax)
 
         self.toolbox = base.Toolbox()
         # Attribute generator
-        self.toolbox.register("random_ind", generate_random_ind)
+        self.toolbox.register("random_ind", generate_random_ind, original_ind)
         # Structure initializers
         self.toolbox.register("individual", tools.initRepeat, creator.Individual, self.toolbox.random_ind, 1)
         self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
 
         self.toolbox.register("evaluate", fitness)
-        self.toolbox.register("mutate", mutate, mutate_params={"std": 0.25, "dim": 1, "min": 0, "max": 5})
-        self.toolbox.register("select", select, fitness=fitness)
+        self.toolbox.register("select", select)
 
         stats_fit = tools.Statistics(key=lambda ind: ind.fitness.values)
         stats_size = tools.Statistics(key=len)
@@ -32,34 +32,34 @@ class DeapEvolution:
         self.mstats.register("max", np.max)
         self.logbook = tools.Logbook()
 
-        self.epochs = 0
         self.expectations = expectations
 
-    def start_from(self, original_ind, timeout):
-        pop = self.toolbox.population(n=1)
-        print("Start of evolution")
-
-        # Evaluate the entire population
-        fitnesses = list(map(self.toolbox.evaluate, pop))
-        for ind, fit in zip(pop, fitnesses):
-            ind.fitness.values = fit
-
-        # Extracting all the fitness of
-        fits = [ind.fitness.values[0] for ind in pop]
-
+    def start_from(self, timeout):
         def _run():
+            pop = self.toolbox.population(n=1)
+            print("Start of evolution")
+
+            # Evaluate the entire population
+            fitnesses = list(map(self.toolbox.evaluate, pop))
+            for ind, fit in zip(pop, fitnesses):
+                ind.fitness.values = fit
+
+            best_ind = tools.selBest(pop, 1)[FIRST]
+            epochs = 0
             # Begin the evolution
             while True:
+                epochs = epochs + 1
                 # A new generation
-                self.epochs = self.epochs + 1
+                pop = self.toolbox.population(n=1)
+                # Evaluate the entire population
+                fitnesses = list(map(self.toolbox.evaluate, pop))
+                for ind, fit in zip(pop, fitnesses):
+                    ind.fitness.values = fit
+
                 # Select the next generation individuals
-                offspring = self.toolbox.select(original_ind, pop)
-                self.toolbox.mutate(offspring)
-                # The population is entirely replaced by the offspring
-                pop[:] = [offspring]
-                best_ind = tools.selBest(pop, 1)[0]
+                best_ind = self.toolbox.select(best_ind, pop)
                 record = self.mstats.compile(pop)
-                self.logbook.record(gen=self.epochs, evals=self.epochs, **record)
+                self.logbook.record(gen=epochs, evals=epochs, **record)
                 if stop_event.is_set():
                     break
 
@@ -84,7 +84,7 @@ class DeapEvolution:
 
         fig, ax1 = plt.subplots()
         line1 = ax1.plot(gen, fit_mins, "b-", label="Fitness")
-        line3 = ax1.plot(gen, self.expectations(self.epochs), "b--", label="Expectation")
+        line3 = ax1.plot(gen, self.expectations(len(gen)), "b--", label="Expectation")
         ax1.set_xlabel("Generation")
         ax1.set_ylabel("Fitness", color="b")
         for tl in ax1.get_yticklabels():

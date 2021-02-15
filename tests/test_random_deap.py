@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from copy import deepcopy
 from individual import Individual
 from deap_evolution import DeapEvolution
 
@@ -21,9 +22,11 @@ def expectations(gens):
     return [-x * 2 * x * (x - 3) * (x - 4) for _ in range(gens)]
 
 
-def generate_random_ind():
+def generate_random_ind(original_ind):
     params = {"min": 0, "max": 5, "dim": 1}
-    return Individual(np.random.uniform(params["min"], params["max"], params["dim"]))
+    random_ind = deepcopy(original_ind)
+    random_ind.value = np.random.uniform(params["min"], params["max"], params["dim"])
+    return random_ind
 
 
 def mutate(deap_inds, mutate_params):
@@ -41,16 +44,19 @@ def mutate(deap_inds, mutate_params):
     return individual  # return deap_individual
 
 
-def select(orig_ind, pop_ind, fitness):
+def select(orig_ind, pop_ind):
     deap_inds = pop_ind[FIRST]  # deap_pop is a list
     target_ind = deap_inds[FIRST]  # deap_individual is a list
 
-    if fitness([orig_ind]) >= fitness([target_ind]):
-        value = orig_ind.value
-        fitness_value = fitness([orig_ind])
+    f1 = orig_ind.fitness.values
+    f2 = deap_inds.fitness.values
+
+    if f1 >= f2:
+        value = orig_ind[FIRST].value
+        fitness_value = f1
     else:
         value = target_ind.value
-        fitness_value = deap_inds.fitness.values
+        fitness_value = f2
 
     deap_inds.fitness.values = fitness_value  # update fitness value to offspring
     deap_inds[FIRST].value = value  # update attribute value to offspring
@@ -60,13 +66,19 @@ def select(orig_ind, pop_ind, fitness):
 class DeapRandomTest(unittest.TestCase):
     def test_deap_evolution(self):
         self.assertEqual(0, 0)
-        rEv = DeapEvolution(fitness, mutate, select, generate_random_ind, expectations)
 
         np.random.seed(64)
         params = {"min": 0, "max": 5, "dim": 1}
         original_ind = Individual(np.random.uniform(params["min"], params["max"], params["dim"]))
 
-        rEv.start_from(original_ind, 1)
+        rEv = DeapEvolution(
+            original_ind=original_ind,
+            fitness=fitness,
+            select=select,
+            generate_random_ind=generate_random_ind,
+            expectations=expectations
+        )
+        rEv.start_from(0.0025)
 
         rEv.print_logbook()
         rEv.visualize_evolution()
