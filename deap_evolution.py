@@ -58,8 +58,11 @@ class DeapEvolution:
 
                 # Select the next generation individuals
                 best_ind = self.toolbox.select(best_ind, pop)
+                pop[:] = [best_ind]
                 record = self.mstats.compile(pop)
                 self.logbook.record(gen=epochs, evals=epochs, **record)
+                if epochs == 20:
+                    break
                 if stop_event.is_set():
                     break
 
@@ -74,30 +77,22 @@ class DeapEvolution:
     def print_logbook(self):
         self.logbook.header = "gen", "evals", "fitness", "size"
         self.logbook.chapters["fitness"].header = "min", "avg", "max"
-        self.logbook.chapters["size"].header = "min", "avg", "max"
         print(self.logbook)
 
     def visualize_evolution(self):
         gen = self.logbook.select("gen")
-        fit_mins = self.logbook.chapters["fitness"].select("min")
-        size_avgs = self.logbook.chapters["size"].select("avg")
+        fit_maxs = self.logbook.chapters["fitness"].select("max")
 
         fig, ax1 = plt.subplots()
-        line1 = ax1.plot(gen, fit_mins, "b-", label="Fitness")
+        line1 = ax1.plot(gen, fit_maxs, "b-", label="Fitness")
         line3 = ax1.plot(gen, self.expectations(len(gen)), "b--", label="Expectation")
         ax1.set_xlabel("Generation")
         ax1.set_ylabel("Fitness", color="b")
+        ax1.set_xticks(gen)
         for tl in ax1.get_yticklabels():
             tl.set_color("b")
 
-        ax2 = ax1.twinx()
-        line2 = ax2.plot(gen, size_avgs, "r-", label="Size")
-        ax2.set_ylabel("Size", color="r")
-        for tl in ax2.get_yticklabels():
-            tl.set_color("r")
-
-        lns = line1 + line2 + line3
-        # lns = line1
+        lns = line1 + line3
         labs = [l.get_label() for l in lns]
         ax1.legend(lns, labs, loc="lower right")
 

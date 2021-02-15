@@ -44,22 +44,15 @@ def mutate(deap_inds, mutate_params):
     return individual  # return deap_individual
 
 
-def select(orig_ind, pop_ind):
+def select(orig_inds, pop_ind):
     deap_inds = pop_ind[FIRST]  # deap_pop is a list
     target_ind = deap_inds[FIRST]  # deap_individual is a list
 
-    f1 = orig_ind.fitness.values
+    f1 = orig_inds.fitness.values
     f2 = deap_inds.fitness.values
 
     if f1 >= f2:
-        value = orig_ind[FIRST].value
-        fitness_value = f1
-    else:
-        value = target_ind.value
-        fitness_value = f2
-
-    deap_inds.fitness.values = fitness_value  # update fitness value to offspring
-    deap_inds[FIRST].value = value  # update attribute value to offspring
+        return orig_inds
     return deap_inds  # return deap_individual
 
 
